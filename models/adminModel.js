@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 // Define the Admin Panel schema
 const AdminPanelSchema = new mongoose.Schema({
     adminemail: {

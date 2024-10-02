@@ -16,13 +16,9 @@ router.get('/get_all_users', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Failed to Fetch Users' });
     }
-
 });
-
-
 router.get('/:id/get_user', async (req, res) => {
     const { id } = req.params;
-
     try {
         const user = await User.findOne({ _id: id });
 
@@ -36,7 +32,6 @@ router.get('/:id/get_user', async (req, res) => {
         if (!user.status) {
             return res.status(401).json({ message: 'User is suspended' });
         }
-
         res.status(200).json({ message: 'User Data fetched', user });
     } catch (error) {
         console.error(error);
@@ -52,7 +47,6 @@ router.post('/get_user_by_MobileNumber', async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
         }
-
         if (!user.isverified) {
             return res.status(401).json({ message: 'User is not verified. Please complete sign-up' });
         }
@@ -90,16 +84,12 @@ router.get('/:id/verfiy_user_token', async (req, res) => {
         if (!authorization || !authorization.startsWith('Bearer ')) {
             return res.status(400).json({ message: 'Invalid or missing token' });
         }
-
         const token = authorization.split(' ')[1];
-
         jwt.verify(token, secretID, (err, decoded) => {
             if (err) {
                 return res.status(400).json({ message: 'Invalid Token or Token Expired' });
             }
-
             // Token is valid, you can use the decoded information if needed
-
             res.status(200).json({ message: 'User Data fetched', user });
         });
     } catch (error) {

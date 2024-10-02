@@ -25,7 +25,7 @@ const adminRouter = require('./api/admin/admin');
 const doorsRouter = require('./api/doors/doors');
 const suggestionRouter = require('./api/suggestion/suggestion');
 const sitenRouter = require('./api/sites/sites');
- const whatsappRouter = require('./api/whatsappRoutes'); // WhatsApp-related routes
+//  const whatsappRouter = require('./api/whatsappRoutes'); // WhatsApp-related routes
 const quotationRouter = require('./api/quotation/quotation');
 
 // Use routes
@@ -35,12 +35,11 @@ app.use('/api/admin', adminRouter);
 app.use('/api/doors', doorsRouter);
 app.use('/api/suggestion', suggestionRouter);
 app.use('/api/sites', sitenRouter);
- app.use('/api/whatsapp', whatsappRouter);
+//  app.use('/api/whatsapp', whatsappRouter);
 app.use('/api/quotation', quotationRouter);
  // Add WhatsApp routes
 // Serve static HTML files (if any)
 app.use(express.static("public"));
-
 // Default route
 app.get('/', async (req, res) => {
   res.json({ message: `Server is running at port ${PORT}` });

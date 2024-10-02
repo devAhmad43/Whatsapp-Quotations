@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 let userSchema = mongoose.Schema({
-    userName: {
+    name: {
         type: String,
         trim: true, required: true,
     },
@@ -11,16 +11,19 @@ let userSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    mobileNumber: {
+    phone: {
         type: String,
         trim: true,
-        required: true,
-        unique: true,
+       
     },
     password: {
         type: String,
         trim: true,
         required: true,
+    },
+    country:{
+type:String,
+trim:true
     },
     iscontactverified: {
         type: Boolean,
@@ -30,7 +33,7 @@ let userSchema = mongoose.Schema({
     },
     isverified: {
         type: Boolean,
-        default: false
+        default: true
     },
     status: {
         type: Boolean,
@@ -55,8 +58,7 @@ let userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    latitude: { type: Number, required: true, default: 0 },
-    longitude: { type: Number, required: true, default: 0 },
+
 
 
 }, { timestamps: true });

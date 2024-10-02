@@ -15,7 +15,6 @@ router.post('/login', async (req, res) => {
     if (!admin.isverified) {
       return res.status(401).json({ message: 'admin is not verified' });
     }
-
     // if (admin.password !== password) {
     //   return res.status(401).json({ message: 'Incorrect password' });
     // }
@@ -23,7 +22,6 @@ router.post('/login', async (req, res) => {
     if (!isPasswordValid) {
         return res.status(400).json({ message: "invalid credationals" });
     }
-
     admin.sessionExpiration = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
     const UserToken = jwt.sign({ id: admin._id }, secretID, { expiresIn: '30d' });
     admin.jwtadmintoken = UserToken
@@ -40,7 +38,6 @@ router.post('/signup', async (req, res) => {
   try {
     // Check if the admin already exists
     const existingAdmin = await AdminPanel.findOne({ adminemail: email });
-
     if (existingAdmin) {
       return res.status(401).json({ message: 'Admin already exists', userstatus: 0 });
     }
@@ -63,10 +60,8 @@ router.post('/signup', async (req, res) => {
     // Assign token and session expiration
     newAdmin.jwtadmintoken = UserToken;
     newAdmin.sessionExpiration = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 30 days
-
     // Save the new admin to the database
     await newAdmin.save();
-
     // Respond with success
     res.status(200).json({ message: 'Admin successfully signed up', admin: newAdmin });
   } catch (error) {
