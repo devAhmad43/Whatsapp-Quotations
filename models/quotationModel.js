@@ -7,14 +7,6 @@ const QuotationSchema = new mongoose.Schema(
     quotationDate: { type: Date, required: true },
     validTill: { type: Date, required: true },
     businessLogo: { type: String },
-    
-    // Linking quotation to a specific user
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true, // Ensure a quotation is linked to a user
-    },
-    
     sender: {
       name: { type: String, required: true },
       email: { type: String, required: true },
