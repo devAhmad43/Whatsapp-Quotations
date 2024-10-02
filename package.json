@@ -16,11 +16,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.3",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.9.15",
-    "puppeteer": "^23.4.1",
-    "qrcode": "^1.5.4",
-    "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.26.0"
+    "nodemailer": "^6.9.15"
   },
   "scripts": {
     "start": "node app.js",
