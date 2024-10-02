@@ -12,11 +12,8 @@ const logger = require("morgan")
 const PORT = process.env.PORT || 2200;
 const app = express();
 // Middleware
-app.use(cors({
-  origin: 'https://whats-app-bot-frontend.vercel.app', // Adjust this to your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
-  credentials: true, // Enable set-cookie if required
-}));
+app.use(cors())
+  app.options("*", cors())
 app.use(express.json());
 app.use(bodyParser.json());
 if (process.env.NODE_ENV === "development") {
