@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 
 const QuotationSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true }, // Assuming title is required
-    quotationNumber: { type: String, required: true }, // Ensure required if needed
-    quotationDate: { type: Date, required: true },
-    validTill: { type: Date, required: true },
+    title: { type: String,  }, // Assuming title is required
+    quotationNumber: { type: String,  }, // Ensure required if needed
+    quotationDate: { type: Date,  },
+    validTill: { type: Date,  },
     businessLogo: { type: String },
     sender: {
-      name: { type: String, required: true },
-      email: { type: String, required: true },
-      phone: { type: String, required: true },
+      name: { type: String,  },
+      email: { type: String,  },
+      phone: { type: String,  },
       city: { type: String },
       postalCode: { type: String },
       country: { type: String },
@@ -18,8 +18,8 @@ const QuotationSchema = new mongoose.Schema(
     
     client: {
       businessImage: { type: String },
-      name: { type: String, required: true },
-      email: { type: String, required: true },
+      name: { type: String,  },
+      email: { type: String,  },
       industry: { type: String }, // Added industry
       city: { type: String },
       country: { type: String },
@@ -27,10 +27,10 @@ const QuotationSchema = new mongoose.Schema(
     
     items: [
       {
-        itemName: { type: String, required: true },
-        quantity: { type: Number, required: true },
-        rate: { type: Number, required: true },
-        amount: { type: Number, required: true }, // Usually calculated based on quantity * rate
+        itemName: { type: String,  },
+        quantity: { type: Number,  },
+        rate: { type: Number,  },
+        amount: { type: Number,  }, // Usually calculated based on quantity * rate
         description: { type: String },
         thumbnailImage: { type: String },
       },

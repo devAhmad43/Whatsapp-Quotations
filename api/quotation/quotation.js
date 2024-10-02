@@ -28,15 +28,15 @@ router.get("/getAll-quotation", async (req, res) => {
     res.status(500).json({ message: "Error fetching quotations" });
   }
 });
-router.get("/:userId/getUserQuotation", async (req, res) => {
-  try {
-    const quotations = await Quotation.find({ user: req.params.userId });
-    res.status(200).json({ message: "fetch quotations success", quotations });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching quotations" });
-  }
-});
+// router.get("/:userId/getUserQuotation", async (req, res) => {
+//   try {
+//     const quotations = await Quotation.find({ user: req.params.userId });
+//     res.status(200).json({ message: "fetch quotations success", quotations });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error fetching quotations" });
+//   }
+// });
 // Get quotation by ID
 router.get("/:quotationId/get-quotation", async (req, res) => {
   try {
@@ -64,9 +64,8 @@ router.put("/:quotationId/edit-quotation", async (req, res) => {
       client,
       items,
       descriptionField,
-      terms, // Include terms in the request
+      terms,
     } = req.body;
-
     if (!quotationNumber || !quotationDate || !validTill) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -85,35 +84,68 @@ router.put("/:quotationId/edit-quotation", async (req, res) => {
     existingQuotation.items = items;
     existingQuotation.descriptionField = descriptionField;
     existingQuotation.terms = terms; // Update terms
-
     // Check if new images are provided, and replace the existing ones if so
     if (businessLogo) {
-      await deleteFile(existingQuotation.businessLogo); // Delete old image from Cloudinary
-      existingQuotation.businessLogo = await uploadFile(businessLogo); // Upload new image
+      // New logo is provided, upload the new logo and delete the old one
+      const newBusinessLogoUrl = await uploadFile(businessLogo);
+      if (newBusinessLogoUrl) { // Ensure the new logo was successfully uploaded
+        if (existingQuotation.businessLogo) {
+          await deleteFile(existingQuotation.businessLogo); // Delete the old logo if it exists
+        }
+        existingQuotation.businessLogo = newBusinessLogoUrl; // Set the new logo URL
+      }
+    } else {
+      // No new logo, keep the previous logo
+      existingQuotation.businessLogo = existingQuotation.businessLogo;
     }
+    
     if (client.businessImage) {
-      await deleteFile(existingQuotation.client.businessImage);
-      existingQuotation.client.businessImage = await uploadFile(
-        client.businessImage
-      );
+      // New image is provided, upload the new image and delete the old one
+      const newBusinessImageUrl = await uploadFile(client.businessImage);
+      if (newBusinessImageUrl) { // Ensure the new image was successfully uploaded
+        if (existingQuotation.client.businessImage) {
+          await deleteFile(existingQuotation.client.businessImage); // Delete the old image if it exists
+        }
+        existingQuotation.client.businessImage = newBusinessImageUrl; // Set the new image URL
+      }
+    } else {
+      // No new image, keep the previous image
+      existingQuotation.client.businessImage = existingQuotation.client.businessImage;
     }
+    
     if (descriptionField.attachment) {
-      await deleteFile(existingQuotation.descriptionField.attachment);
-      existingQuotation.descriptionField.attachment = await uploadFile(
-        descriptionField.attachment
-      );
+      // New image is provided, so delete the old one and upload the new one
+      const newAttachmentUrl = await uploadFile(descriptionField.attachment);
+      if (newAttachmentUrl) { // Ensure the new image was successfully uploaded
+        if (existingQuotation.descriptionField.attachment) {
+          await deleteFile(existingQuotation.descriptionField.attachment); // Delete the old image
+        }
+        existingQuotation.descriptionField.attachment = newAttachmentUrl; // Set the new image URL
+      }
+    } else {
+      // No new image, so retain the previous image
+      existingQuotation.descriptionField.attachment = existingQuotation.descriptionField.attachment;
     }
+    
     // Handle multiple items and their images
     if (items && items.length) {
       for (let i = 0; i < items.length; i++) {
         if (items[i].thumbnailImage) {
-          await deleteFile(existingQuotation.items[i].thumbnailImage); // Delete old image
-          existingQuotation.items[i].thumbnailImage = await uploadFile(
-            items[i].thumbnailImage
-          ); // Upload new image
+          // Upload new thumbnail and replace the old one
+          const newThumbnailUrl = await uploadFile(items[i].thumbnailImage);
+          if (newThumbnailUrl) { // Ensure the new thumbnail was successfully uploaded
+            if (existingQuotation.items[i].thumbnailImage) {
+              await deleteFile(existingQuotation.items[i].thumbnailImage); // Delete the old thumbnail if it exists
+            }
+            existingQuotation.items[i].thumbnailImage = newThumbnailUrl; // Set the new thumbnail URL
+          }
+        } else {
+          // No new thumbnail, keep the previous one
+          existingQuotation.items[i].thumbnailImage = existingQuotation.items[i].thumbnailImage;
         }
       }
     }
+    
 
     // Save the updated quotation
     await existingQuotation.save();
