@@ -187,7 +187,6 @@ router.put("/:quotationId/edit-quotation", async (req, res) => {
       descriptionField,
       terms,
     } = req.body;
-
     if (!quotationNumber || !quotationDate || !validTill) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -291,8 +290,6 @@ router.put("/:quotationId/edit-quotation", async (req, res) => {
     res.status(500).json({ message: "Failed to update quotation", error: error.message });
   }
 });
-
-
 
 // Delete quotation by ID
 router.delete("/:quotationId/delete-quotation", async (req, res) => {
